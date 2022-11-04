@@ -1,6 +1,7 @@
 from time import perf_counter, localtime, strftime
 import datetime
 from os import system, name
+from time import time
 
 
 end_word = ""
@@ -20,13 +21,10 @@ with open("config.txt", mode="r+", encoding="utf-8-sig") as f:
             print(text)
             time_end = strftime("%H:%M:%S", localtime()) # время
             minutes_in_day = 24 * 60
-
-            date_time_str = text.split(";")[0].split('=')[1] + ' ' + text.split(";")[2].split('=')[1]
-            date_time_old = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
-            date_time_difference = datetime.datetime.now() - date_time_old
-            date_time_difference_minutes = date_time_difference.days * minutes_in_day
+            timer =  int(time() - float(text.split(";")[1].split("=")[1])) * 60
+            print(int(time()))
             result = "Date=" + str(datetime.date.today()) + ";" + "timer=" +\
-                    str(date_time_difference_minutes) + ";" + "time_start=" +\
+                    str(int(timer)) + ";" + "time_start=" +\
                     text.split(";")[2].split('=')[1] + ";" + "time_end=" + time_end +\
                      ";" + "name=" + text.split(";")[3].split("=")[1] + ";"
             save_data(result)
@@ -54,6 +52,8 @@ def Restart(text, first, second, status=False):
                 raise EndIterEndSave("End iter and save data users for another day")
             break
         elif "2" in check:
+            if status:
+                break
             raise EndIter("Don't like note")
         else:
             print('Error, try again')
@@ -96,7 +96,7 @@ while True:
         clear_console()
         with open("config.txt", mode="w", encoding="utf-8-sig") as f:
             f.write("Date=" + str(datetime.date.today()) + ";" + "timer=" +\
-                       str(timer_start) + ";" + "time_start=" +\
+                       str(time()) + ";" + "time_start=" +\
                        time_start + ";" + "name=" + name_task + ";")
         break
 
