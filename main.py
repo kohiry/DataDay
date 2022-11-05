@@ -18,11 +18,8 @@ with open("config.txt", mode="r+", encoding="utf-8-sig") as f:
     if len(text_list) > 0:
         text = text_list[0]
         if input("We found don't saved information. Save? 1 - yes; 2 - no\n") == '1':
-            print(text)
             time_end = strftime("%H:%M:%S", localtime()) # время
-            minutes_in_day = 24 * 60
-            timer =  int(time() - float(text.split(";")[1].split("=")[1])) * 60
-            print(int(time()))
+            timer =  int(time() - float(text.split(";")[1].split("=")[1]))
             result = "Date=" + str(datetime.date.today()) + ";" + "timer=" +\
                     str(int(timer)) + ";" + "time_start=" +\
                     text.split(";")[2].split('=')[1] + ";" + "time_end=" + time_end +\
