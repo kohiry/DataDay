@@ -23,7 +23,8 @@ with open("config.txt", mode="r+", encoding="utf-8-sig") as f:
             result = "Date=" + str(datetime.date.today()) + ";" + "timer=" +\
                     str(int(timer)) + ";" + "time_start=" +\
                     text.split(";")[2].split('=')[1] + ";" + "time_end=" + time_end +\
-                     ";" + "name=" + text.split(";")[3].split("=")[1] + ";"
+                     ";" + "name=" + text.split(";")[3].split("=")[1] + ";" +\
+                     "Category=" + text.split(";")[4].split("=")[1] + ";"
             save_data(result)
     f.truncate(0)
 
@@ -34,6 +35,13 @@ class EndIter(Exception):
 
 class EndIterEndSave(Exception):
     pass
+
+
+def category_file():
+    text = ''
+    with open("category.txt", mode="r", encoding="utf-8-sig") as f:
+        text = f.readlines()[0].split(';')
+    return text[0: len(text)-1]
 
 
 def clear_console():
@@ -67,26 +75,35 @@ while True:
         if '2' in end_word:
             break
         elif "1" in end_word:
-            name_task = input("input name your task\n")
-            Restart("You Shure?", "yes", "no")
-            timer_start = int(perf_counter()) # таймер
-            time_start = strftime("%H:%M:%S", localtime()) # время
-            Restart("Timer started. You want to close?", "Yes", "No", True)
-            input('For stop press Enter')
-            print('Ok.')
-            Restart("_______________", "Save", "Delete")
-            timer_end = int(perf_counter())
-            time_end = strftime("%H:%M:%S", localtime()) # время
-            save_data("Date=" + str(datetime.date.today()) + ";" + "timer=" +\
-                       str(timer_end - timer_start) + ";" + "time_start=" +\
-                       time_start + ";" + "time_end=" + time_end +\
-                        ";" + "name=" + name_task + ";")
-            print("Data Saved.")
+            print('chose your category:')
+            choses_category = [str(i+1) for i in range(len(category_file()))]
+            print("choose:", "\t".join(category_file()))
+            category = input("input: " + "\t".join(choses_category) + "\n")
+            if category not in choses_category:
+                print("Incorrect category. Try again in another iteration.")
+                raise EndIter
+            else:
+                name_task = input("input name your task\n")
+                Restart("You Shure?", "yes", "no")
+                timer_start = int(perf_counter()) # таймер
+                time_start = strftime("%H:%M:%S", localtime()) # время
+                Restart("Timer started. You want to close?", "Yes", "No", True)
+                input('For stop press Enter')
+                print('Ok.')
+                Restart("_______________", "Save", "Delete")
+                timer_end = int(perf_counter())
+                time_end = strftime("%H:%M:%S", localtime()) # время
+                save_data("Date=" + str(datetime.date.today()) + ";" + "timer=" +\
+                           str(timer_end - timer_start) + ";" + "time_start=" +\
+                           time_start + ";" + "time_end=" + time_end +\
+                            ";" + "name=" + name_task + ";" +\
+                            "Category=" + category_file()[int(category)-1] + ";")
+                print("Data Saved.")
         else:
             print("Data incorrect. Try again!")
         clear_console()
     except EndIter:
-        print('Ok. Restart.')
+        input('Ok. Restart. press Enter\n')
         clear_console()
     except EndIterEndSave:
         print('Ok. Restart.')
@@ -94,7 +111,8 @@ while True:
         with open("config.txt", mode="w", encoding="utf-8-sig") as f:
             f.write("Date=" + str(datetime.date.today()) + ";" + "timer=" +\
                        str(time()) + ";" + "time_start=" +\
-                       time_start + ";" + "name=" + name_task + ";")
+                       time_start + ";" + "name=" + name_task + ";" +\
+                       "Category=" + category_file()[int(category)-1] + ";")
         break
 
 # with open('text.txt', 'w'):

@@ -31,22 +31,22 @@ class Data:
         return str(self.text)
 
 
-
-my_text = Data()
-format_text = my_text.return_data()
-counter = 0
-for i in my_text.date_set():
-    print(f"____________{i}____________")
-    for elem in format_text:
-        if elem["Date"] == i:
-            hours = int(elem["timer"]) // 60 // 60
-            minutes = str(int(elem["timer"]) // 60)
-            counter = int(elem["time_start"].split(":")[0])
-            if hours == 0:
-                print(counter * "-" + "1" + (24 - counter - hours) * "-", " -- " + elem['name'],  minutes + "=minutes")
-            else:
-                print(counter * "-" + hours * "1" + (24 - counter - hours) * "-", " -- " + elem['name'],  minutes + "=minutes")
+if __name__ == "__main__":
+    my_text = Data()
+    format_text = my_text.return_data()
     counter = 0
-print(f"____________End Script____________")
-input("For stop press Enter")
-system('cls' if name == 'nt' else 'clear')
+    for i in my_text.date_set():
+        print(f"____________{i}____________")
+        for elem in format_text:
+            if elem["Date"] == i:
+                hours = int(elem["timer"]) // 60 // 60
+                minutes = str(int(elem["timer"]) // 60)
+                counter = int(elem["time_start"].split(":")[0])
+                if hours == 0:
+                    print(counter * "-" + "1" + (24 - counter - hours) * "-", " -- " + elem['name'],  minutes + "=minutes")
+                else:
+                    print(counter * "-" + hours * "1" + (24 - counter - hours) * "-", " -- " + elem['name'],  minutes + "=minutes")
+        counter = 0
+    print(f"____________End Script____________")
+    input("For stop press Enter")
+    system('cls' if name == 'nt' else 'clear')
